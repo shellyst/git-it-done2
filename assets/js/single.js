@@ -6,13 +6,15 @@ var getRepoName = function () {
   // Assign query string to a variable.
   var queryString = document.location.search;
   var repoName = queryString.split("=")[1];
+  //   Check for valid values before passing them into function calls.
+  //   If repoName valid, feed value to the fetch call.
   if (repoName) {
     // display repo name on the page
     repoNameEl.textContent = repoName;
 
     getRepoIssues(repoName);
   } else {
-    // if no repo was given, redirect to the homepage
+    // If no repo was given, redirect to the homepage.
     document.location.replace("./index.html");
   }
 };
@@ -31,7 +33,7 @@ var getRepoIssues = function (repo) {
         }
       });
     } else {
-      // if not successful, redirect to homepage
+      // if not successful, redirect to homepage.
       document.location.replace("./index.html");
     }
   });
@@ -39,8 +41,7 @@ var getRepoIssues = function (repo) {
 
 var displayWarning = function (repo) {
   // Add text to warning container.
-  limitWarningEl.textContent =
-    "To see more than 30 issues, visit ";
+  limitWarningEl.textContent = "To see more than 30 issues, visit ";
 
   var linkEl = document.createElement("a");
   linkEl.textContent = "See More Issues on GitHub.com";
