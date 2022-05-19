@@ -1,3 +1,9 @@
+var userFormEl = document.querySelector("#user-form");
+var nameInputEl = document.querySelector("#username");
+var repoContainerEl = document.querySelector("#repos-container");
+var repoSearchTerm = document.querySelector("#repo-search-term");
+var languageButtonsEl = document.querySelector("#language=buttons");
+
 var getUserRepos = function (user) {
   // Format the Github API Url.
   var apiUrl = "https://api.github.com/users/" + user + "/repos";
@@ -18,11 +24,6 @@ var getUserRepos = function (user) {
     });
 };
 
-var userFormEl = document.querySelector("#user-form");
-var nameInputEl = document.querySelector("#username");
-var repoContainerEl = document.querySelector("#repos-container");
-var repoSearchTerm = document.querySelector("#repo-search-term");
-
 var formSubmitHandler = function (event) {
   event.preventDefault();
   //   Get value from input element.
@@ -34,6 +35,26 @@ var formSubmitHandler = function (event) {
   } else {
     alert("Please enter a username!");
   }
+};
+
+var getFeaturedRepos = function (language) {
+  var apiUrl =
+    "https://api.github.com/search/repositories?q=" +
+    language +
+    "is:featured&sort=help-wanted-issues";
+
+  // Format the response before we display it on the page.
+  fetch(apiUrl).then(function (response) {
+    if (response.ok) {
+      // Extract the JSON from the response.
+      response.json().then(function (data) {
+        //   Pass data.items and parameter's value into displayRepos.
+        displayRepos(data.items, language);
+      });
+    } else {
+      alert("Error: Github user not found!");
+    }
+  });
 };
 
 var displayRepos = function (repos, searchTerm) {
@@ -84,6 +105,17 @@ var displayRepos = function (repos, searchTerm) {
 
     // Append container to the DOM.
     repoContainerEl.appendChild(repoEl);
+  }
+};
+
+var buttonClickHandler = function (event) {
+  var language = event.target.getAttribute("data-language");
+
+  if (language) {
+    getFeaturedRepos(language);
+
+    // Clear old content.
+    repoContainerEl.textContent = "";
   }
 };
 
