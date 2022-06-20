@@ -2,7 +2,7 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
-var languageButtonsEl = document.querySelector("#language=buttons");
+var languageButtonsEl = document.querySelector("#language-buttons");
 
 var getUserRepos = function (user) {
   // Format the Github API Url.
@@ -11,6 +11,8 @@ var getUserRepos = function (user) {
   fetch(apiUrl)
     .then(function (response) {
       if (response.ok) {
+        // Need to use a method to extract the JSON from the response.
+        // Parse the response.
         response.json().then(function (data) {
           displayRepos(data, user);
         });
@@ -37,6 +39,7 @@ var formSubmitHandler = function (event) {
   }
 };
 
+// Makes HTTP request to endpoint using fetch.
 var getFeaturedRepos = function (language) {
   var apiUrl =
     "https://api.github.com/search/repositories?q=" +
@@ -109,6 +112,8 @@ var displayRepos = function (repos, searchTerm) {
 };
 
 var buttonClickHandler = function (event) {
+  // even object has a target property that tells us exactly which HTML element was interacted with to create the event.
+  // Once we know which element we interacted with, we can use the getAttribute method to read the data-language attribute's value assigned to the element.
   var language = event.target.getAttribute("data-language");
 
   if (language) {
@@ -120,3 +125,4 @@ var buttonClickHandler = function (event) {
 };
 
 userFormEl.addEventListener("submit", formSubmitHandler);
+languageButtonsEl.addEventListener("click", buttonClickHandler);
